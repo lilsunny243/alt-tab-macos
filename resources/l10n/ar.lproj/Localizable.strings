@@ -39,6 +39,9 @@
 "Allowed" = "مسموح";
 
 /*No comment provided by engineer.*/
+"Alphabetical" = "Alphabetical";
+
+/*No comment provided by engineer.*/
 "Also select windows using:" = "أيضاً إختر النوافذ ب:";
 
 /*No comment provided by engineer.*/
@@ -147,6 +150,9 @@
 "Fullscreen windows:" = "النوافذ كاملة الشاشة:";
 
 /*No comment provided by engineer.*/
+"Fullscreen/Defullscreen window" = "Fullscreen/Defullscreen window";
+
+/*No comment provided by engineer.*/
 "General" = "عام";
 
 /*No comment provided by engineer.*/
@@ -251,6 +257,9 @@
 "Preferences…" = "التفضيلات…";
 
 /*No comment provided by engineer.*/
+"Preview selected window:" = "Preview selected window:";
+
+/*No comment provided by engineer.*/
 "Quit" = "إغلاق";
 
 /*No comment provided by engineer.*/
@@ -258,6 +267,12 @@
 
 /*No comment provided by engineer.*/
 "Quit app" = "إغلاق البرنامج";
+
+/*No comment provided by engineer.*/
+"Recently Created" = "Recently Created";
+
+/*No comment provided by engineer.*/
+"Recently Focused" = "Recently Focused";
 
 /*No comment provided by engineer.*/
 "Remember my choice" = "تذكر خياري";
@@ -348,6 +363,9 @@
 "Source code repository" = "مخزن شفرة المصدر";
 
 /*No comment provided by engineer.*/
+"Space" = "Space";
+
+/*No comment provided by engineer.*/
 "Start" = "البداية";
 
 /*No comment provided by engineer.*/
@@ -409,6 +427,9 @@
 
 /*No comment provided by engineer.*/
 "Window min width in row:" = "أصغر عرض للنافذة بالأعمدة:";
+
+/*No comment provided by engineer.*/
+"Window order:" = "Window order:";
 
 /*No comment provided by engineer.*/
 "Window title font size:" = "حجم خط عنوان النافذة:";

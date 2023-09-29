@@ -16,7 +16,9 @@ class App: AppCenterApplication, NSApplicationDelegate {
     static let licence = Bundle.main.object(forInfoDictionaryKey: "NSHumanReadableCopyright") as! String
     static let repository = "https://github.com/lwouis/alt-tab-macos"
     static var app: App!
+    var menubar: Menubar!
     var thumbnailsPanel: ThumbnailsPanel!
+    var previewPanel: PreviewPanel!
     var preferencesWindow: PreferencesWindow!
     var feedbackWindow: FeedbackWindow!
     var isFirstSummon = true
@@ -52,9 +54,10 @@ class App: AppCenterApplication, NSApplicationDelegate {
             guard let self = self else { return }
             BackgroundWork.start()
             Preferences.initialize()
-            Menubar.initialize()
+            self.menubar = Menubar()
             self.loadMainMenuXib()
             self.thumbnailsPanel = ThumbnailsPanel()
+            self.previewPanel = PreviewPanel()
             Spaces.initialDiscovery()
             Applications.initialDiscovery()
             self.preferencesWindow = PreferencesWindow()
@@ -107,12 +110,15 @@ class App: AppCenterApplication, NSApplicationDelegate {
         App.shared.terminate(self)
     }
 
-    func hideUi() {
+    func hideUi(_ keepPreview: Bool = false) {
         debugPrint("hideUi")
         appIsBeingUsed = false
         isFirstSummon = true
         MouseEvents.toggle(false)
         hideThumbnailPanelWithoutChangingKeyWindow()
+        if !keepPreview {
+            previewPanel.orderOut(nil)
+        }
         hideAllTooltips()
     }
 
@@ -139,6 +145,10 @@ class App: AppCenterApplication, NSApplicationDelegate {
 
     func minDeminSelectedWindow() {
         Windows.focusedWindow()?.minDemin()
+    }
+
+    func toggleFullscreenSelectedWindow() {
+        Windows.focusedWindow()?.toggleFullscreen()
     }
 
     func quitSelectedApp() {
@@ -198,11 +208,14 @@ class App: AppCenterApplication, NSApplicationDelegate {
     }
 
     func focusSelectedWindow(_ selectedWindow: Window?) {
-        hideUi()
-        guard let window = selectedWindow, !CGWindow.isMissionControlActive() else { return }
-        window.focus()
-        if Preferences.cursorFollowFocusEnabled {
-            moveCursorToSelectedWindow(window)
+        hideUi(true)
+        if let window = selectedWindow, !MissionControl.isActive() {
+            window.focus()
+            if Preferences.cursorFollowFocusEnabled {
+                moveCursorToSelectedWindow(window)
+            }
+        } else {
+            previewPanel.orderOut(nil)
         }
     }
 
@@ -255,7 +268,7 @@ class App: AppCenterApplication, NSApplicationDelegate {
         if isFirstSummon || shortcutIndex != self.shortcutIndex {
             debugPrint("showUiOrCycleSelection: isFirstSummon")
             isFirstSummon = false
-            if Windows.list.count == 0 || CGWindow.isMissionControlActive() { hideUi(); return }
+            if Windows.list.count == 0 || MissionControl.isActive() { hideUi(); return }
             // TODO: can the CGS call inside detectTabbedWindows introduce latency when WindowServer is busy?
             Windows.detectTabbedWindows()
             // TODO: find a way to update space info when spaces are changed, instead of on every trigger
@@ -295,6 +308,7 @@ class App: AppCenterApplication, NSApplicationDelegate {
         refreshOpenUi()
         guard appIsBeingUsed else { return }
         thumbnailsPanel.show()
+        Windows.previewFocusedWindowIfNeeded()
         guard appIsBeingUsed else { return }
         Windows.refreshThumbnailsAsync(screen)
         guard appIsBeingUsed else { return }

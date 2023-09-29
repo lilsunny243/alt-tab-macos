@@ -39,6 +39,9 @@
 "Allowed" = "Разрешено";
 
 /*No comment provided by engineer.*/
+"Alphabetical" = "Alphabetical";
+
+/*No comment provided by engineer.*/
 "Also select windows using:" = "Также выбирать окна, используя:";
 
 /*No comment provided by engineer.*/
@@ -147,6 +150,9 @@
 "Fullscreen windows:" = "Развернутые окна:";
 
 /*No comment provided by engineer.*/
+"Fullscreen/Defullscreen window" = "Fullscreen/Defullscreen window";
+
+/*No comment provided by engineer.*/
 "General" = "Основное";
 
 /*No comment provided by engineer.*/
@@ -249,6 +255,9 @@
 "Preferences…" = "Настройки…";
 
 /*No comment provided by engineer.*/
+"Preview selected window:" = "Preview selected window:";
+
+/*No comment provided by engineer.*/
 "Quit" = "Выход";
 
 /*No comment provided by engineer.*/
@@ -256,6 +265,12 @@
 
 /*No comment provided by engineer.*/
 "Quit app" = "Выйти из приложения";
+
+/*No comment provided by engineer.*/
+"Recently Created" = "Recently Created";
+
+/*No comment provided by engineer.*/
+"Recently Focused" = "Recently Focused";
 
 /*No comment provided by engineer.*/
 "Remember my choice" = "Запомнить мой выбор";
@@ -345,6 +360,9 @@
 "Source code repository" = "Репозиторий исходного кода";
 
 /*No comment provided by engineer.*/
+"Space" = "Space";
+
+/*No comment provided by engineer.*/
 "Start" = "Начало";
 
 /*No comment provided by engineer.*/
@@ -406,6 +424,9 @@
 
 /*No comment provided by engineer.*/
 "Window min width in row:" = "Минимальная ширина эскиза в ряду:";
+
+/*No comment provided by engineer.*/
+"Window order:" = "Window order:";
 
 /*No comment provided by engineer.*/
 "Window title font size:" = "Размер заголовка:";

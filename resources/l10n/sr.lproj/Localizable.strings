@@ -39,6 +39,9 @@
 "Allowed" = "Dozvoljeno";
 
 /*No comment provided by engineer.*/
+"Alphabetical" = "Alphabetical";
+
+/*No comment provided by engineer.*/
 "Also select windows using:" = "Takođe odabiraj prozore koristeći:";
 
 /*No comment provided by engineer.*/
@@ -147,6 +150,9 @@
 "Fullscreen windows:" = "Prozori preko celog ekrana:";
 
 /*No comment provided by engineer.*/
+"Fullscreen/Defullscreen window" = "Fullscreen/Defullscreen window";
+
+/*No comment provided by engineer.*/
 "General" = "Generalno";
 
 /*No comment provided by engineer.*/
@@ -249,6 +255,9 @@
 "Preferences…" = "Podešavanja…";
 
 /*No comment provided by engineer.*/
+"Preview selected window:" = "Preview selected window:";
+
+/*No comment provided by engineer.*/
 "Quit" = "Zatvori";
 
 /*No comment provided by engineer.*/
@@ -256,6 +265,12 @@
 
 /*No comment provided by engineer.*/
 "Quit app" = "Zatvori aplikaciju";
+
+/*No comment provided by engineer.*/
+"Recently Created" = "Recently Created";
+
+/*No comment provided by engineer.*/
+"Recently Focused" = "Recently Focused";
 
 /*No comment provided by engineer.*/
 "Remember my choice" = "Zapamti moj izbor";
@@ -345,6 +360,9 @@
 "Source code repository" = "Repozitorijum s izvornim kodom";
 
 /*No comment provided by engineer.*/
+"Space" = "Space";
+
+/*No comment provided by engineer.*/
 "Start" = "Početak";
 
 /*No comment provided by engineer.*/
@@ -406,6 +424,9 @@
 
 /*No comment provided by engineer.*/
 "Window min width in row:" = "Minimalna širina prozora u redu:";
+
+/*No comment provided by engineer.*/
+"Window order:" = "Window order:";
 
 /*No comment provided by engineer.*/
 "Window title font size:" = "Veličina naslova u prozoru:";

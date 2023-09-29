@@ -39,6 +39,9 @@
 "Allowed" = "Tillatt";
 
 /*No comment provided by engineer.*/
+"Alphabetical" = "Alphabetical";
+
+/*No comment provided by engineer.*/
 "Also select windows using:" = "Velg også vinduer som bruker:";
 
 /*No comment provided by engineer.*/
@@ -147,6 +150,9 @@
 "Fullscreen windows:" = "Vinduer i fullskjerm:";
 
 /*No comment provided by engineer.*/
+"Fullscreen/Defullscreen window" = "Fullscreen/Defullscreen window";
+
+/*No comment provided by engineer.*/
 "General" = "Generelt";
 
 /*No comment provided by engineer.*/
@@ -249,6 +255,9 @@
 "Preferences…" = "Valg…";
 
 /*No comment provided by engineer.*/
+"Preview selected window:" = "Preview selected window:";
+
+/*No comment provided by engineer.*/
 "Quit" = "Avslutt";
 
 /*No comment provided by engineer.*/
@@ -256,6 +265,12 @@
 
 /*No comment provided by engineer.*/
 "Quit app" = "Avslutt app";
+
+/*No comment provided by engineer.*/
+"Recently Created" = "Recently Created";
+
+/*No comment provided by engineer.*/
+"Recently Focused" = "Recently Focused";
 
 /*No comment provided by engineer.*/
 "Remember my choice" = "Husk valget mitt";
@@ -345,6 +360,9 @@
 "Source code repository" = "Kildekodearkiv";
 
 /*No comment provided by engineer.*/
+"Space" = "Space";
+
+/*No comment provided by engineer.*/
 "Start" = "Start";
 
 /*No comment provided by engineer.*/
@@ -406,6 +424,9 @@
 
 /*No comment provided by engineer.*/
 "Window min width in row:" = "Minimum vindusbredde på rad:";
+
+/*No comment provided by engineer.*/
+"Window order:" = "Window order:";
 
 /*No comment provided by engineer.*/
 "Window title font size:" = "Skriftstørrelse på vindutittel:";

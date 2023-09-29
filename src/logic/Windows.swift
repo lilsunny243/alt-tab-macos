@@ -10,18 +10,39 @@ class Windows {
     /// reordered list based on preferences, keeping the original index
     static func reorderList() {
         list.sort {
-            if let bool = sortByBooleanAttribute($0.isWindowlessApp, $1.isWindowlessApp) {
-                return bool
+            // separate buckets for these types of windows
+            if $0.isWindowlessApp != $1.isWindowlessApp {
+                return $1.isWindowlessApp
             }
-            if Preferences.showHiddenWindows[App.app.shortcutIndex] == .showAtTheEnd,
-               let bool = sortByBooleanAttribute($0.isHidden, $1.isHidden) {
-                return bool
+            if Preferences.showHiddenWindows[App.app.shortcutIndex] == .showAtTheEnd && $0.isHidden != $1.isHidden {
+               return $1.isHidden
             }
-            if Preferences.showMinimizedWindows[App.app.shortcutIndex] == .showAtTheEnd,
-               let bool = sortByBooleanAttribute($0.isMinimized, $1.isMinimized) {
-                return bool
+            if Preferences.showMinimizedWindows[App.app.shortcutIndex] == .showAtTheEnd && $0.isMinimized != $1.isMinimized {
+                return $1.isMinimized
             }
-            return $0.lastFocusOrder < $1.lastFocusOrder
+
+            // sort within each buckets
+            let sortType = Preferences.windowOrder[App.app.shortcutIndex]
+            if sortType == .recentlyFocused {
+                return $0.lastFocusOrder < $1.lastFocusOrder
+            }
+            if sortType == .recentlyCreated {
+                return $1.creationOrder < $0.creationOrder
+            }
+            var order = ComparisonResult.orderedSame
+            if sortType == .alphabetical {
+                order = sortByAppNameThenWindowTitle($0, $1)
+            }
+            if sortType == .space {
+                order = $0.spaceIndex.compare($1.spaceIndex)
+                if order == .orderedSame {
+                    order = sortByAppNameThenWindowTitle($0, $1)
+                }
+            }
+            if order == .orderedSame {
+                order = $0.lastFocusOrder.compare($1.lastFocusOrder)
+            }
+            return order == .orderedAscending
         }
     }
 
@@ -34,13 +55,13 @@ class Windows {
             ThumbnailsView.highlight(oldIndex)
         }
         if let app = Applications.find(NSWorkspace.shared.frontmostApplication?.processIdentifier),
-           app.focusedWindow == nil,
+           (app.focusedWindow == nil || Preferences.windowOrder[App.app.shortcutIndex] != .recentlyFocused),
            let lastFocusedWindowIndex = getLastFocusedWindowIndex() {
-            updateHoveredAndFocusedWindowIndexes(lastFocusedWindowIndex)
+            updateFocusedAndHoveredWindowIndex(lastFocusedWindowIndex)
         } else {
             cycleFocusedWindowIndex(1)
             if focusedWindowIndex == 0 {
-                updateHoveredAndFocusedWindowIndexes(0)
+                updateFocusedAndHoveredWindowIndex(0)
             }
         }
     }
@@ -99,7 +120,7 @@ class Windows {
         return nil
     }
 
-    static func updateHoveredAndFocusedWindowIndexes(_ newIndex: Int, _ fromMouse: Bool = false) {
+    static func updateFocusedAndHoveredWindowIndex(_ newIndex: Int, _ fromMouse: Bool = false) {
         var index: Int?
         if fromMouse && newIndex != hoveredWindowIndex {
             let oldIndex = hoveredWindowIndex
@@ -113,6 +134,7 @@ class Windows {
             let oldIndex = focusedWindowIndex
             focusedWindowIndex = newIndex
             ThumbnailsView.highlight(oldIndex)
+            previewFocusedWindowIfNeeded()
             index = focusedWindowIndex
         }
         guard let index = index else { return }
@@ -120,6 +142,25 @@ class Windows {
         let focusedView = ThumbnailsView.recycledViews[index]
         App.app.thumbnailsPanel.thumbnailsView.scrollView.contentView.scrollToVisible(focusedView.frame)
         voiceOverWindow(index)
+    }
+
+    static func previewFocusedWindowIfNeeded() {
+        guard
+            Preferences.previewFocusedWindow,
+            App.app.appIsBeingUsed && App.app.thumbnailsPanel.isKeyWindow,
+            let window = focusedWindow(),
+            let preview = window.getPreview(),
+            let position = window.position,
+            let size = window.size
+        else {
+            App.app.previewPanel.orderOut(nil)
+            return
+        }
+        App.app.previewPanel.setPreview(preview)
+        var frame = NSRect(origin: position, size: size)
+        frame.origin.y = NSScreen.screens[0].frame.maxY - frame.maxY
+        App.app.previewPanel.setFrame(frame, display: false)
+        App.app.previewPanel.order(.below, relativeTo: App.app.thumbnailsPanel.windowNumber)
     }
 
     static func voiceOverWindow(_ windowIndex: Int = focusedWindowIndex) {
@@ -144,7 +185,7 @@ class Windows {
                (KeyRepeatTimer.isARepeat || KeyRepeatTimer.timer?.isValid ?? false) {
             return
         }
-        updateHoveredAndFocusedWindowIndexes(nextIndex)
+        updateFocusedAndHoveredWindowIndex(nextIndex)
     }
 
     static func windowIndexAfterCycling(_ step: Int) -> Int {
@@ -169,6 +210,8 @@ class Windows {
         if let focusedWindow = focusedWindow() {
             if !focusedWindow.shouldShowTheUser {
                 cycleFocusedWindowIndex(windowIndexAfterCycling(1) > focusedWindowIndex ? 1 : -1)
+            } else {
+                previewFocusedWindowIfNeeded()
             }
         } else {
             cycleFocusedWindowIndex(-1)
@@ -185,10 +228,21 @@ class Windows {
     /// tabs detection is a flaky work-around the lack of public API to observe OS tabs
     /// see: https://github.com/lwouis/alt-tab-macos/issues/1540
     static func detectTabbedWindows() {
-        let cgsWindowIds = Spaces.windowsInSpaces(Spaces.idsAndIndexes.map { $0.0 })
+        lazy var cgsWindowIds = Spaces.windowsInSpaces(Spaces.idsAndIndexes.map { $0.0 })
+        lazy var visibleCgsWindowIds = Spaces.windowsInSpaces(Spaces.idsAndIndexes.map { $0.0 }, false)
         list.forEach {
             if let cgWindowId = $0.cgWindowId {
-                $0.isTabbed = !cgsWindowIds.contains(cgWindowId)
+                if $0.isMinimized || $0.isHidden {
+                    if #available(macOS 13, *) {
+                        // not exact after window merging
+                        $0.isTabbed = !cgsWindowIds.contains(cgWindowId)
+                    } else {
+                        // not known
+                        $0.isTabbed = false
+                    }
+                } else {
+                    $0.isTabbed = !visibleCgsWindowIds.contains(cgWindowId)
+                }
             }
         }
     }
@@ -263,13 +317,10 @@ class Windows {
     }
 }
 
-func sortByBooleanAttribute(_ b1: Bool, _ b2: Bool) -> Bool? {
-    if b1 && !b2 {
-        return false
+func sortByAppNameThenWindowTitle(_ w1: Window, _ w2: Window) -> ComparisonResult {
+    var order = w1.application.runningApplication.localizedName.localizedStandardCompare(w2.application.runningApplication.localizedName)
+    if order == .orderedSame {
+        return w1.title.localizedStandardCompare(w2.title)
     }
-    if !b1 && b2 {
-        return true
-    }
-    return nil
+    return order
 }
-

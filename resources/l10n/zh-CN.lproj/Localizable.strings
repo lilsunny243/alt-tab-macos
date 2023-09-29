@@ -39,6 +39,9 @@
 "Allowed" = "允许";
 
 /*No comment provided by engineer.*/
+"Alphabetical" = "Alphabetical";
+
+/*No comment provided by engineer.*/
 "Also select windows using:" = "窗口选择方式：";
 
 /*No comment provided by engineer.*/
@@ -147,6 +150,9 @@
 "Fullscreen windows:" = "全屏窗口：";
 
 /*No comment provided by engineer.*/
+"Fullscreen/Defullscreen window" = "Fullscreen/Defullscreen window";
+
+/*No comment provided by engineer.*/
 "General" = "通用";
 
 /*No comment provided by engineer.*/
@@ -249,6 +255,9 @@
 "Preferences…" = "偏好设置…";
 
 /*No comment provided by engineer.*/
+"Preview selected window:" = "Preview selected window:";
+
+/*No comment provided by engineer.*/
 "Quit" = "退出";
 
 /*No comment provided by engineer.*/
@@ -256,6 +265,12 @@
 
 /*No comment provided by engineer.*/
 "Quit app" = "退出应用";
+
+/*No comment provided by engineer.*/
+"Recently Created" = "Recently Created";
+
+/*No comment provided by engineer.*/
+"Recently Focused" = "Recently Focused";
 
 /*No comment provided by engineer.*/
 "Remember my choice" = "记住我的选择";
@@ -345,6 +360,9 @@
 "Source code repository" = "源代码仓库";
 
 /*No comment provided by engineer.*/
+"Space" = "Space";
+
+/*No comment provided by engineer.*/
 "Start" = "开头";
 
 /*No comment provided by engineer.*/
@@ -406,6 +424,9 @@
 
 /*No comment provided by engineer.*/
 "Window min width in row:" = "每行窗口最小宽度：";
+
+/*No comment provided by engineer.*/
+"Window order:" = "Window order:";
 
 /*No comment provided by engineer.*/
 "Window title font size:" = "窗口标题字号：";
